@@ -1,0 +1,4 @@
+[crop]
+row_1_height = 0.65
+row_1_height_cutoff = 0.75
+width = 0.6
