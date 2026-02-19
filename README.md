@@ -5,7 +5,7 @@ For use in Endfield Stocks OCR and Endfield Stocks Bot
 
 ## Installation
 Install via pip:<br>
-`pip install endfield-ocr-core
+`pip install endfield-ocr-core`
 
 Install tesseract:<br>
 [Download link](https://github.com/UB-Mannheim/tesseract/wiki)<br>
