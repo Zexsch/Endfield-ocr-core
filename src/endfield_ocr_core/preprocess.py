@@ -5,13 +5,15 @@ from PIL import Image
 from endfield_ocr_core.regions import valley, wuling
 from endfield_ocr_core.models.region_not_found import RegionNotFoundException
 
+
 def get_mult(region: str, index: int) -> dict[str, float]:
     if region == "valley":
         return valley(index)
     if region == "wuling":
         return wuling(index)
-    
+
     raise RegionNotFoundException(region)
+
 
 def preprocess(img: Image.Image, index: int, region: str):
     multipliers = get_mult(region, index)
@@ -22,7 +24,7 @@ def preprocess(img: Image.Image, index: int, region: str):
     img = img.convert("L")
     cv_img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
     h, w = cv_img.shape[:2]
-    cropped = cv_img[int(h * h_mult):int(h * h_mult_2), int(w * w_mult):]
+    cropped = cv_img[int(h * h_mult) : int(h * h_mult_2), int(w * w_mult) :]
     grey = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
     grey = cv2.convertScaleAbs(grey, alpha=1.5, beta=0)
     blur = cv2.medianBlur(grey, 3)
@@ -39,5 +41,5 @@ def preprocess(img: Image.Image, index: int, region: str):
     scaled = cv2.resize(thresh, None, fx=5, fy=5, interpolation=cv2.INTER_CUBIC)
     _, final = cv2.threshold(scaled, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     pil_image = Image.fromarray(cv2.cvtColor(final, cv2.COLOR_BGR2RGB))
-    
+
     return pil_image
