@@ -19,7 +19,7 @@ from endfield_ocr_core.models.config import (
 def get_ocr_values(
     img: Image.Image, rows: int, cols: int, region: str, debug_files=False
 ) -> dict[str, str]:
-    config_numbers = r"--oem 3 --psm 7 -c tessedit_char_whitelist=0123456789"
+    config_numbers = r"--oem 3 --psm 8 -c tessedit_char_whitelist=0123456789"
     config_items = r"--oem 3 --psm 6 -c preserve_interword_spaces=1 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789[]'-"
 
     img_list = split_image(img, rows, cols)
@@ -27,37 +27,38 @@ def get_ocr_values(
     results: dict[str, str] = {}
 
     for index, image in enumerate(img_list):
+        if region == Region.VALLEY.value and index >= 13:
+            continue
+
         image_number = preprocess(image, index, region, CropTypes.NUMBER)
         image_item = preprocess(image, index, region, CropTypes.ITEM)
         res_number = pytesseract.image_to_string(
             image_number, config=config_numbers
         ).strip()
-        
+
         res_item = pytesseract.image_to_string(image_item, config=config_items).strip()
-        res_item = res_item.replace(r'\n', '')
-        
+        res_item = res_item.replace(r"\n", "")
+
         if "[pkg]" in res_item:
-            res_item = res_item.replace("[pkg]", '')
-            
-        
+            res_item = res_item.replace("[pkg]", "")
+
         if region == Region.WULING.value:
             region_item_type = WULING_ITEM_NAMES
         elif region == Region.VALLEY.value:
             region_item_type = VALLEY_ITEM_NAMES
         else:
             region_item_type = ""
-        
-        item_result = process.extractOne(
-                res_item,
-                region_item_type,
-                scorer=fuzz.WRatio
-            )
-        
+
+        item_result = process.extractOne(res_item, region_item_type, scorer=fuzz.WRatio)
+
         if item_result is None:
             raise ItemNotFoundException(res_item)
-        
-        match, _, _ = item_result
-        
+
+        match, score, _ = item_result
+
+        if score < 20:
+            continue
+
         results[match] = res_number
 
         if debug_files:

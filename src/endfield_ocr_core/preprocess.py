@@ -27,7 +27,9 @@ def preprocess(img: Image.Image, index: int, region: str, crop_type: CropTypes):
     img = img.convert("L")
     cv_img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
     h, w = cv_img.shape[:2]
-    cropped = cv_img[int(h * h_mult) : int(h * h_mult_2), int(w * w_mult) : int(w * w_mult_2)]
+    cropped = cv_img[
+        int(h * h_mult) : int(h * h_mult_2), int(w * w_mult) : int(w * w_mult_2)
+    ]
     grey = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
     grey = cv2.convertScaleAbs(grey, alpha=1.5, beta=0)
     blur = cv2.medianBlur(grey, 3)

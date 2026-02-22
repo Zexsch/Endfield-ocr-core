@@ -1,7 +1,7 @@
 # WIP
 
 # Endfield Stocks OCR Core
-For use in Endfield Stocks OCR and Endfield Stocks Bot
+Core utils for the Endfield stocks project
 
 ## Installation
 Install via pip:<br>

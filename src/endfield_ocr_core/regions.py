@@ -29,10 +29,18 @@ def valley(index: int, crop: str) -> dict[str, float]:
     w_mult = config["width"]
     w_mult_2 = config["width_2"]
 
-    return {"h_mult": h_mult, "h_mult_2": h_mult_2, "w_mult": w_mult, "w_mult_2": w_mult_2}
+    return {
+        "h_mult": h_mult,
+        "h_mult_2": h_mult_2,
+        "w_mult": w_mult,
+        "w_mult_2": w_mult_2,
+    }
 
 
 def wuling(index: int, crop: str) -> dict[str, float]:
+    if index >= 0:
+        pass
+
     config = _get_config(Region.WULING.value)
     config = config[crop]
 
@@ -40,4 +48,9 @@ def wuling(index: int, crop: str) -> dict[str, float]:
     h_mult_2 = config["row_1_height_cutoff"]
     w_mult = config["width"]
     w_mult_2 = config["width_2"]
-    return {"h_mult": h_mult, "h_mult_2": h_mult_2, "w_mult": w_mult, "w_mult_2": w_mult_2}
+    return {
+        "h_mult": h_mult,
+        "h_mult_2": h_mult_2,
+        "w_mult": w_mult,
+        "w_mult_2": w_mult_2,
+    }
