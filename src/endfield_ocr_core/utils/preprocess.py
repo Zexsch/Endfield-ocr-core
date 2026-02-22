@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 from PIL import Image
 
-from endfield_ocr_core.regions import valley, wuling
+from endfield_ocr_core.utils.regions import valley, wuling
 from endfield_ocr_core.models.exceptions import RegionNotFoundException
 from endfield_ocr_core.models.config import Region, CropTypes
 

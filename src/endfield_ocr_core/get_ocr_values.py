@@ -1,13 +1,13 @@
 from datetime import datetime
-from pathlib import Path
 
 import pytesseract
 from PIL import Image
 from rapidfuzz import process, fuzz
 
-from endfield_ocr_core.split_image import split_image
-from endfield_ocr_core.preprocess import preprocess
+from endfield_ocr_core.utils.split_image import split_image
+from endfield_ocr_core.utils.preprocess import preprocess
 from endfield_ocr_core.models.exceptions import ItemNotFoundException
+from endfield_ocr_core.utils.package_dirs import PackageDirs
 from endfield_ocr_core.models.config import (
     CropTypes,
     Region,
@@ -65,11 +65,8 @@ def get_ocr_values(
             now = datetime.now().strftime("%Y_%m_%d_%H-%M")
             image_name_number = str(f"{index+1}_NUMBER") + ".png"
             image_name_item = str(f"{index+1}_ITEM") + ".png"
-            base_dir = Path(__file__).parent / "Debug Images"
+            base_dir = PackageDirs().debug_files_dir / "Debug Images"
             sub_dir = base_dir / now
-
-            if not base_dir.exists():
-                base_dir.mkdir(parents=True, exist_ok=True)
 
             if not sub_dir.exists():
                 sub_dir.mkdir(parents=True, exist_ok=True)

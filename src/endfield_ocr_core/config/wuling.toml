@@ -1,4 +1,5 @@
 [crop_numbers]
+# You'll want row 2 to be equal to row 1 for most cases
 row_1_height = 0.65
 row_1_height_cutoff = 0.75
 width = 0.625
