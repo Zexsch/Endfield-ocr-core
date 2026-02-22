@@ -6,16 +6,18 @@ import toml
 
 from endfield_ocr_core.models.config import Region
 
+
 def _get_config(region: str) -> dict[str, Any]:
     config_dir = Path(__file__).parent / "config" / f"{region}.toml"
     with resources.open_text("endfield_ocr_core.config", str(config_dir)) as f:
         config = toml.load(f)
 
-    return config["crop"]
+    return config
 
 
-def valley(index: int) -> dict[str, float]:
+def valley(index: int, crop: str) -> dict[str, float]:
     config = _get_config(Region.VALLEY.value)
+    config = config[crop]
 
     if index >= 7:
         h_mult = config["row_2_height"]
@@ -25,14 +27,17 @@ def valley(index: int) -> dict[str, float]:
         h_mult_2 = config["row_1_height_cutoff"]
 
     w_mult = config["width"]
+    w_mult_2 = config["width_2"]
 
-    return {"h_mult": h_mult, "h_mult_2": h_mult_2, "w_mult": w_mult}
+    return {"h_mult": h_mult, "h_mult_2": h_mult_2, "w_mult": w_mult, "w_mult_2": w_mult_2}
 
 
-def wuling(index: int) -> dict[str, float]:
+def wuling(index: int, crop: str) -> dict[str, float]:
     config = _get_config(Region.WULING.value)
+    config = config[crop]
 
     h_mult = config["row_1_height"]
     h_mult_2 = config["row_1_height_cutoff"]
     w_mult = config["width"]
-    return {"h_mult": h_mult, "h_mult_2": h_mult_2, "w_mult": w_mult}
+    w_mult_2 = config["width_2"]
+    return {"h_mult": h_mult, "h_mult_2": h_mult_2, "w_mult": w_mult, "w_mult_2": w_mult_2}

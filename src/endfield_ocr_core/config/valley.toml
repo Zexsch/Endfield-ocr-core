@@ -1,7 +1,16 @@
-[crop]
+[crop_numbers]
 # You'll want row 2 to be equal to row 1 for most cases
 row_1_height = 0.65
 row_1_height_cutoff = 0.75
 row_2_height = 0.65
 row_2_height_cutoff = 0.75
 width = 0.6
+width_2 = 1
+
+[crop_items]
+row_1_height = 0.82
+row_1_height_cutoff = 1
+row_2_height = 0.82
+row_2_height_cutoff = 1
+width = 0
+width_2 = 1

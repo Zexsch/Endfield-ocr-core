@@ -3,30 +3,31 @@ import cv2
 from PIL import Image
 
 from endfield_ocr_core.regions import valley, wuling
-from endfield_ocr_core.models.region_not_found import RegionNotFoundException
-from endfield_ocr_core.models.config import Region
+from endfield_ocr_core.models.exceptions import RegionNotFoundException
+from endfield_ocr_core.models.config import Region, CropTypes
 
 
-def get_mult(region: str, index: int) -> dict[str, float]:
+def get_mult(region: str, index: int, crop_type: CropTypes) -> dict[str, float]:
     if region == Region.VALLEY:
-        return valley(index)
+        return valley(index, crop_type.value)
     if region == Region.WULING:
-        return wuling(index)
+        return wuling(index, crop_type.value)
 
     raise RegionNotFoundException(region)
 
 
-def preprocess(img: Image.Image, index: int, region: str):
-    multipliers = get_mult(region, index)
+def preprocess(img: Image.Image, index: int, region: str, crop_type: CropTypes):
+    multipliers = get_mult(region, index, crop_type)
     h_mult = multipliers["h_mult"]
     h_mult_2 = multipliers["h_mult_2"]
     w_mult = multipliers["w_mult"]
+    w_mult_2 = multipliers["w_mult_2"]
 
     # Preprocessing magic for tesseract
     img = img.convert("L")
     cv_img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
     h, w = cv_img.shape[:2]
-    cropped = cv_img[int(h * h_mult) : int(h * h_mult_2), int(w * w_mult) :]
+    cropped = cv_img[int(h * h_mult) : int(h * h_mult_2), int(w * w_mult) : int(w * w_mult_2)]
     grey = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
     grey = cv2.convertScaleAbs(grey, alpha=1.5, beta=0)
     blur = cv2.medianBlur(grey, 3)
@@ -41,9 +42,13 @@ def preprocess(img: Image.Image, index: int, region: str):
         cropped = grey
 
     # Upscaling
-    scaled = cv2.resize(thresh, None, fx=5, fy=5, interpolation=cv2.INTER_CUBIC)
-    
-    _, final = cv2.threshold(scaled, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    scaled = cv2.resize(cropped, None, fx=5, fy=5, interpolation=cv2.INTER_CUBIC)
+
+    if crop_type == CropTypes.ITEM:
+        _, final = cv2.threshold(scaled, 180, 255, cv2.THRESH_BINARY_INV)
+    else:
+        _, final = cv2.threshold(scaled, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
     pil_image = Image.fromarray(cv2.cvtColor(final, cv2.COLOR_BGR2RGB))
 
     return pil_image

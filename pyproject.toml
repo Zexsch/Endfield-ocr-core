@@ -15,7 +15,8 @@ dependencies = [
   "pytesseract",
   "pillow",
   "toml",
-  "opencv-python-headless"
+  "opencv-python-headless",
+  "rapidfuzz"
 ]
 
 [tool.hatch.build.targets.wheel]
