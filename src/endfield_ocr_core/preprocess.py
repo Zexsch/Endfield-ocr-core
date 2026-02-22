@@ -4,12 +4,13 @@ from PIL import Image
 
 from endfield_ocr_core.regions import valley, wuling
 from endfield_ocr_core.models.region_not_found import RegionNotFoundException
+from endfield_ocr_core.models.config import Region
 
 
 def get_mult(region: str, index: int) -> dict[str, float]:
-    if region == "valley":
+    if region == Region.VALLEY:
         return valley(index)
-    if region == "wuling":
+    if region == Region.WULING:
         return wuling(index)
 
     raise RegionNotFoundException(region)
@@ -21,6 +22,7 @@ def preprocess(img: Image.Image, index: int, region: str):
     h_mult_2 = multipliers["h_mult_2"]
     w_mult = multipliers["w_mult"]
 
+    # Preprocessing magic for tesseract
     img = img.convert("L")
     cv_img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
     h, w = cv_img.shape[:2]
@@ -38,7 +40,9 @@ def preprocess(img: Image.Image, index: int, region: str):
     else:
         cropped = grey
 
+    # Upscaling
     scaled = cv2.resize(thresh, None, fx=5, fy=5, interpolation=cv2.INTER_CUBIC)
+    
     _, final = cv2.threshold(scaled, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     pil_image = Image.fromarray(cv2.cvtColor(final, cv2.COLOR_BGR2RGB))
 
