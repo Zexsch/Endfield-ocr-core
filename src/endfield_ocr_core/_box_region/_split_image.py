@@ -1,7 +1,7 @@
-from PIL import Image
+from PIL.Image import Image
 
 
-def split_image(img: Image.Image, rows: int, cols: int) -> list[Image.Image]:
+def split_image(img: Image, rows: int, cols: int) -> list[Image]:
     img_width, img_height = img.size
 
     cells = []

@@ -1,7 +1,7 @@
 import pytesseract
 from PIL import Image
 
-from endfield_ocr_core.region.split_image import split_image
+from endfield_ocr_core._box_region._split_image import split_image
 from endfield_ocr_core.utils.preprocess import preprocess
 from endfield_ocr_core.utils.debug_image_save import save_debug_image
 from endfield_ocr_core.utils.clean_item_name import clean_item_name

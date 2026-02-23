@@ -1,9 +1,9 @@
 import numpy as np
 from PIL.Image import Image
 
-from endfield_ocr_core.region._crop_bottom import crop_bottom
-from endfield_ocr_core.region._crop_top import crop_top
-from endfield_ocr_core.region._crop_width import crop_width
+from endfield_ocr_core._box_region._crop_bottom import crop_bottom
+from endfield_ocr_core._box_region._crop_top import crop_top
+from endfield_ocr_core._box_region._crop_width import crop_width
 from endfield_ocr_core.models.bounding_box import BoundingBoxRaw
 
 

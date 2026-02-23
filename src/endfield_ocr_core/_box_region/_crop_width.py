@@ -1,6 +1,6 @@
 import numpy as np
 
-from endfield_ocr_core.region._edge_detect import detect_edges
+from endfield_ocr_core._box_region._edge_detect import detect_edges
 
 
 def crop_width(
