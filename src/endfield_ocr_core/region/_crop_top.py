@@ -6,7 +6,9 @@ from endfield_ocr_core.models.bounding_box import BoundingBox
 from endfield_ocr_core.models.exceptions import MarketBBoxNotFound
 
 
-def crop_top(image: np.ndarray, padding_y: int = 10, min_confidence: int = 50) -> BoundingBox:
+def crop_top(
+    image: np.typing.NDArray, padding_y: int = 10, min_confidence: int = 50
+) -> BoundingBox:
     grey = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     grey = cv2.GaussianBlur(grey, (3, 3), 0)
 
@@ -38,7 +40,7 @@ def crop_top(image: np.ndarray, padding_y: int = 10, min_confidence: int = 50) -
     img_h, img_w = grey.shape
 
     region_y = y + h + padding_y
-    
+
     bbox = BoundingBox(0, region_y, img_w, img_h - region_y)
 
     return bbox

@@ -1,5 +1,6 @@
-import cv2
 import numpy as np
+
+from endfield_ocr_core.region._edge_detect import detect_edges
 
 
 def crop_bottom(
@@ -14,12 +15,7 @@ def crop_bottom(
     Returns cropped image and height.
     """
 
-    grey = cv2.cvtColor(region, cv2.COLOR_BGR2GRAY)
-    if grey.dtype != np.uint8:
-        grey = np.clip(grey, 0, 255).astype(np.uint8)
-
-    blurred = cv2.GaussianBlur(grey, (5, 5), 0)
-    edges = cv2.Canny(blurred, 50, 150)
+    edges = detect_edges(region)
 
     h, _ = edges.shape
 

@@ -4,6 +4,7 @@ from PIL.Image import Image
 
 from endfield_ocr_core.utils.package_dirs import PackageDirs
 
+
 def save_debug_image(image_number: Image, image_item: Image, index: int) -> None:
     now = datetime.now().strftime("%Y_%m_%d_%H-%M")
     image_name_number = str(f"{index+1}_NUMBER") + ".png"

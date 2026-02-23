@@ -1,13 +1,14 @@
 import numpy as np
 import cv2
 from PIL import Image
+from cv2.typing import MatLike
 
 from endfield_ocr_core.utils.regions import valley, wuling
 from endfield_ocr_core.models.exceptions import RegionNotFoundException
 from endfield_ocr_core.models.config import Region, CropTypes
 
 
-def get_mult(region: str, index: int, crop_type: CropTypes) -> dict[str, float]:
+def _get_mult(region: str, index: int, crop_type: CropTypes) -> dict[str, float]:
     if region == Region.VALLEY:
         return valley(index, crop_type.value)
     if region == Region.WULING:
@@ -16,20 +17,27 @@ def get_mult(region: str, index: int, crop_type: CropTypes) -> dict[str, float]:
     raise RegionNotFoundException(region)
 
 
-def preprocess(img: Image.Image, index: int, region: str, crop_type: CropTypes):
-    multipliers = get_mult(region, index, crop_type)
+def _crop_image(img: MatLike, region, index, crop_type) -> MatLike:
+    multipliers = _get_mult(region, index, crop_type)
     h_mult = multipliers["h_mult"]
     h_mult_2 = multipliers["h_mult_2"]
     w_mult = multipliers["w_mult"]
     w_mult_2 = multipliers["w_mult_2"]
+    h, w = img.shape[:2]
 
+    cropped = img[
+        int(h * h_mult) : int(h * h_mult_2), int(w * w_mult) : int(w * w_mult_2)
+    ]
+
+    return cropped
+
+
+def preprocess(img: Image.Image, index: int, region: str, crop_type: CropTypes):
     # Preprocessing magic for tesseract
     img = img.convert("L")
     cv_img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-    h, w = cv_img.shape[:2]
-    cropped = cv_img[
-        int(h * h_mult) : int(h * h_mult_2), int(w * w_mult) : int(w * w_mult_2)
-    ]
+    cropped = _crop_image(cv_img, region, index, crop_type)
+
     grey = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
     grey = cv2.convertScaleAbs(grey, alpha=1.5, beta=0)
     blur = cv2.medianBlur(grey, 3)

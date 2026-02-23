@@ -1,5 +1,6 @@
-import cv2
 import numpy as np
+
+from endfield_ocr_core.region._edge_detect import detect_edges
 
 
 def crop_width(
@@ -9,11 +10,7 @@ def crop_width(
     ignore_right_ratio=0.08,
     min_width_fraction=0.05,
 ):
-    grey = cv2.cvtColor(region, cv2.COLOR_BGR2GRAY)
-    if grey.dtype != np.uint8:
-        grey = np.clip(grey, 0, 255).astype(np.uint8)
-    blurred = cv2.GaussianBlur(grey, (5, 5), 0)
-    edges = cv2.Canny(blurred, 50, 150)
+    edges = detect_edges(region)
 
     # ignore extreme right portion
     crop_limit = int(edges.shape[1] * (1 - ignore_right_ratio))
@@ -34,7 +31,7 @@ def crop_width(
     left = indices[0]
     right = indices[-1]
 
-    # ignore narrow spans (like scrollbars)
+    # ignore narrow spans (like scrollbar)
     if (right - left) < region.shape[1] * min_width_fraction:
         return region, 0, region.shape[1]
 

@@ -12,12 +12,13 @@ class BoundingBox:
     width: float
     height: float
 
+
 @dataclass
 class BoundingBoxRaw:
     """
     All values are supposed to be in pixels
     """
-    
+
     x: int
     y: int
     width: int
