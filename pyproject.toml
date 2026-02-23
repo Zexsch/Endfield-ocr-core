@@ -16,7 +16,8 @@ dependencies = [
   "pillow",
   "toml",
   "opencv-python-headless",
-  "rapidfuzz"
+  "rapidfuzz",
+  "platformdirs"
 ]
 
 [tool.hatch.build.targets.wheel]
