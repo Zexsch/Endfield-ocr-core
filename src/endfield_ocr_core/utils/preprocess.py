@@ -5,7 +5,7 @@ from cv2.typing import MatLike
 
 from endfield_ocr_core.utils.regions import valley, wuling
 from endfield_ocr_core.models.exceptions import RegionNotFoundException
-from endfield_ocr_core.models.config import Region, CropTypes
+from endfield_ocr_core.config.config import Region, CropTypes
 
 
 def _get_mult(region: str, index: int, crop_type: CropTypes) -> dict[str, float]:

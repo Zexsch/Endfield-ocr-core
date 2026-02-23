@@ -2,7 +2,7 @@ from typing import Any
 
 import toml
 
-from endfield_ocr_core.models.config import Region
+from endfield_ocr_core.config.config import Region
 from endfield_ocr_core.utils.package_dirs import PackageDirs
 from endfield_ocr_core.models.exceptions import RegionNotFoundException
 

@@ -1,7 +1,7 @@
 from rapidfuzz import process, fuzz
 
 from endfield_ocr_core.models.exceptions import ItemNotFoundException
-from endfield_ocr_core.models.config import (
+from endfield_ocr_core.config.config import (
     Region,
     WULING_ITEM_NAMES,
     VALLEY_ITEM_NAMES,
