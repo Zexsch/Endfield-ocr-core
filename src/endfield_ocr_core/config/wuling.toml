@@ -1,3 +1,5 @@
+# Defines how to subcrop the per-cell split image for Wuling
+
 [crop_numbers]
 # You'll want row 2 to be equal to row 1 for most cases
 row_1_height = 0.65
