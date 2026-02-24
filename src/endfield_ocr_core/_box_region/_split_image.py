@@ -1,8 +1,14 @@
 from PIL.Image import Image
 
+from endfield_ocr_core.utils._get_config import _get_config
 
-def split_image(img: Image, rows: int, cols: int) -> list[Image]:
+
+def split_image(img: Image, region: str) -> list[Image]:
     img_width, img_height = img.size
+
+    config = _get_config(region)
+    rows = config["split"]["rows"]
+    cols = config["split"]["cols"]
 
     cells = []
     for row in range(rows):

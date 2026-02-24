@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 from numpy.typing import NDArray
 
+
 def detect_edges(region: NDArray) -> NDArray:
     grey = cv2.cvtColor(region, cv2.COLOR_BGR2GRAY)
     if grey.dtype != np.uint8:

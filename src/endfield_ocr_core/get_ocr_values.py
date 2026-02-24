@@ -15,10 +15,12 @@ from endfield_ocr_core.config.config import (
 
 
 def get_ocr_values(
-    img: Image.Image, rows: int, cols: int, region: str, debug_files=False
+    img: Image.Image, region_enum: Region, debug_files=False
 ) -> dict[str, int]:
 
-    img_list = split_image(img, rows, cols)
+    region = region_enum.value
+
+    img_list = split_image(img, region)
 
     results: dict[str, int] = {}
 
