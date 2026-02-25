@@ -10,10 +10,6 @@ def crop_bottom(
     ignore_bottom_ratio=0.0,
     min_height_fraction=0.05,
 ):
-    """
-    Crop only the bottom edge of a region to the last structural content.
-    Returns cropped image and height.
-    """
 
     edges = detect_edges(region)
 

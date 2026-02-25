@@ -7,7 +7,7 @@ def crop_width(
     region,
     edge_threshold_ratio=0.2,
     smooth_kernel=21,
-    ignore_right_ratio=0.08,
+    ignore_right_ratio=0.1,
     min_width_fraction=0.05,
 ):
     edges = detect_edges(region)

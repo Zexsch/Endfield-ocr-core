@@ -59,3 +59,7 @@ CONFIG_NUMBERS = r"""
 -c textord_heavy_nr=1
 -c textord_min_linesize=2.5
 """
+
+CONFIG_CROP_TOP = r"""
+--psm 6
+"""
