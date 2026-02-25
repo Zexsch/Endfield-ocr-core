@@ -32,13 +32,8 @@ def _crop_image(img: MatLike, region, index, crop_type) -> MatLike:
     return cropped
 
 
-def preprocess(img: Image.Image, index: int, region: str, crop_type: CropTypes):
-    # Preprocessing magic for tesseract
-    img = img.convert("L")
-    cv_img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-    cropped = _crop_image(cv_img, region, index, crop_type)
-
-    grey = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
+def preprocess_steps(img: np.typing.NDArray, fx=5, fy=5) -> np.typing.NDArray:
+    grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     grey = cv2.convertScaleAbs(grey, alpha=1.5, beta=0)
     blur = cv2.medianBlur(grey, 3)
     _, thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
@@ -52,7 +47,18 @@ def preprocess(img: Image.Image, index: int, region: str, crop_type: CropTypes):
         cropped = grey
 
     # Upscaling
-    scaled = cv2.resize(cropped, None, fx=5, fy=5, interpolation=cv2.INTER_CUBIC)
+    scaled = cv2.resize(cropped, None, fx=fx, fy=fy, interpolation=cv2.INTER_CUBIC)
+
+    return scaled
+
+
+def preprocess(img: Image.Image, index: int, region: str, crop_type: CropTypes):
+    # Preprocessing magic for tesseract
+    img = img.convert("L")
+    cv_img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+    cropped = _crop_image(cv_img, region, index, crop_type)
+
+    scaled = preprocess_steps(cropped)
 
     if crop_type == CropTypes.ITEM:
         _, final = cv2.threshold(scaled, 180, 255, cv2.THRESH_BINARY_INV)
